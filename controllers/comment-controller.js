@@ -9,7 +9,7 @@ const commentController = {
         return Pizza.findOneAndUpdate(
           { _id: params.pizzaId },
           { $push: { comments: _id } },
-          { new: true }
+          { new: true, runValidators: true }
         );
       })
       .then(dbPizzaData => {
@@ -24,7 +24,7 @@ const commentController = {
 
   // add reply to comment
   addReply({ params, body }, res) {
-    Comment.findOneAndUpdate({ _id: params.commentId }, { $push: { replies: body } }, { new: true })
+    Comment.findOneAndUpdate({ _id: params.commentId }, { $push: { replies: body } }, { new: true, runValidators: true })
       .then(dbPizzaData => {
         if (!dbPizzaData) {
           res.status(404).json({ message: 'No pizza found with this id!' });
@@ -45,7 +45,7 @@ const commentController = {
         return Pizza.findOneAndUpdate(
           { _id: params.pizzaId },
           { $pull: { comments: params.commentId } },
-          { new: true }
+          { new: true, runValidators: true }
         );
       })
       .then(dbPizzaData => {
@@ -62,7 +62,7 @@ const commentController = {
     Comment.findOneAndUpdate(
       { _id: params.commentId },
       { $pull: { replies: { replyId: params.replyId } } },
-      { new: true }
+      { new: true, runValidators: true }
     )
       .then(dbPizzaData => res.json(dbPizzaData))
       .catch(err => res.json(err));
